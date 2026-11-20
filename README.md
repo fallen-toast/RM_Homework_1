@@ -15,5 +15,13 @@
   2.Keil里面：
     开启TIM2:HAL_TIM_BASE_Start_IT(&htim2)
     填上HAL_TIM-PeriodElapseCallBack,指定TIM2,然后用位反转函数将PA5的电平反转
-    
+(3)LED_EXTI_1_3对应必做作业3
+  1.STM32CubeMX里面： 
+  把PA0引脚设置成extio,high,pull-up
+  把PA5引脚设置成output
+  2.Keil里面：
+  按下按钮，电平变化，出发中断，把PA0引脚传进去
+  记录上一次按下的时刻，在用HAL_Gettick()返回上一个按下去的时刻
+  判断相差有没有大于20ms，如果有，反转PA5的电平
+  把这次的时刻记录成上一个时刻，用来和下一次对比
     
