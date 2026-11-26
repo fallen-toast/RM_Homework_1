@@ -27,7 +27,7 @@
     Clock Source选Internal Clock
     channel 1和channel 2分别选上PWM Generation CH1和CH2
     PSC写71
-    Counter Period写19999
+    ARR写19999
   2.Keil里面：
     全局变量：
       button，0是呼吸灯，1是舵机
