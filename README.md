@@ -1,27 +1,54 @@
-(1)LED_BLINK_1_1对应必做作业1
-  1.STM32CubeMX里面：
-    像培训那样设置
-    将PA5引脚设置成output
+（2）Homwwork_2_1对应必做作业1
+  1.Cube MX里面：
+    PA0选EXTI0，双边沿触发，pull-up
+    PA5选output
+    选TIM2，PSC写7199，Counter Period写9，在NVIC开启TIM2中断
   2.Keil里面：
-    while(1){}实现死循环
-    然后用HAL_GPIO_TogglePin实现这个引脚电平的反转，让它在循环里面1和0不断互换，让LED闪烁
-    HAL_Delay实现延时
-(2)LED_BLINK_1_2对应必做作业2
-  1.STM32CubeMX里面：
-    同上
-    将timer选TIM2,clock source选internal clock,这样计时器就选好了
-    把prescaler改成7199,counter period改成2499
-    把nvic setting 选上TIM2
+    全局变量：
+      light是灯的模式，0是常灭，1是常亮，2是闪烁
+      press是按下按钮的时间
+      count是记录闪烁
+    开启TIM2定时器
+    用EXTI回调函数判断长按还是短按：
+      先判断按的时间是否是20ms以上，消抖
+      记录按下和松开的时间差
+      如果时间差小于1000ms，是短按，light如果是1就变成0，如果是0就变成1，如果是2就变成0
+      如果时间差大于1000ms，light如果是2就变成1，如果是0或者1就变成2
+      最后将上次的时刻记作现在的时刻
+    TIM2回调处理闪烁：
+      light如果是0就写引脚RESET，count变0，如果是1就写引脚是SET，count变0
+      light如果是2就count++,count到100就翻转PA5的电平，然后count变0
+      
+(1)Homework_2_2对应必做作业2
+  我用一个按钮控制呼吸灯和舵机的转换
+  1.CubeMX里面：
+    PA0选EXTI0，下降沿，pull-up，NVIC Setting选EXTIline0 interrupt
+    Timer选TIM3
+    Clock Source选Internal Clock
+    channel 1和channel 2分别选上PWM Generation CH1和CH2
+    PSC写71
+    ARR写19999
   2.Keil里面：
-    开启TIM2:HAL_TIM_BASE_Start_IT(&htim2)
-    填上HAL_TIM-PeriodElapseCallBack,指定TIM2,然后用位反转函数将PA5的电平反转
-(3)LED_EXTI_1_3对应必做作业3
-  1.STM32CubeMX里面： 
-    把PA0引脚设置成extio,high,pull-up
-    把PA5引脚设置成output
-  2.Keil里面：
-    按下按钮，电平变化，触发中断，把PA0引脚编号传进去，用uint16_t类型
-    用static保留上一次按下的时刻，用uint32_t类型，然后在用HAL_Gettick()返回这一次按下去的时刻
-    判断相差有没有大于20ms，如果有，反转PA5的电平
-    把这次的时刻记录成上一个时刻，用来和下一次对比
+    全局变量：
+      button，0是呼吸灯，1是舵机
+    用HAL_TIM_PWM_START()分别开启两个PWM，channel 1对应PA6，Channel 2对应PA7
+    按下PA0中断回调：
+      消抖20ms
+      button如果是1就变0，如果是0就变1
+    button如果是0
+      计数器先判断有没有按下按钮改变button的值，如果没有，i从0到19999,再从19999到0
+      用__HAL_TIM_SET_COMPARE函数设置的值随i变化，让占空比从0%变到100%
+      延时5ms,让呼吸周期变成2s
+    button如果是1
+      计数器先判断有没有按下按钮改变button的值，如果没有，spin从0到180.再从180到0
+      CCR = 500 + (spin * 2000/180)，spin就是角度
+      用__HAL_TIM_SET_COMPARE函数设置的值随CCR变化
+      延时10ms
+      
+      
+      
+      
+    
+    
+    
     
