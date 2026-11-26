@@ -108,14 +108,14 @@ int main(void)
 					break;
 				}
 				__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,i);
-				HAL_Delay(10);
+				HAL_Delay(5);
 			}
 			for (int i = 19999;i >= 0;i -= 100) {
 				if (button != 0){
 					break;
 				}
 				__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,i);
-				HAL_Delay(10);
+				HAL_Delay(5);
 			}
 		}
 		
