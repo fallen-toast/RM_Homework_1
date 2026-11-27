@@ -46,7 +46,6 @@
       延时10ms
 
 (3)Homework_2_3对应必做作业3
-  其实培训PPT里面包含几乎全部步骤了
   1.Cube MX里面：
     PA0选ADC1_IN0，变成模拟输入，然后把Sampling Time写成55.5 Cycles
   2.KEIL:
