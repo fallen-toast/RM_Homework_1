@@ -44,7 +44,23 @@
       CCR = 500 + (spin * 2000/180)，spin就是角度
       用__HAL_TIM_SET_COMPARE函数设置的值随CCR变化
       延时10ms
-      
+
+(3)Homework_2_3对应必做作业3
+  其实培训PPT里面包含几乎全部步骤了
+  1.Cube MX里面：
+    PA0选ADC1_IN0，变成模拟输入，然后把Sampling Time写成55.5 Cycles
+  2.KEIL:
+    HAL_ADC_Start(),启动ADC转换
+    HAL_ADC_PollForConversion(),轮询每次等待10ms
+    ADC = HAL_ADC_GetValue()，读取转换结果给ADC
+    HAL_ADC_Stop(),停下ADC
+    把数字换算成电压Dian_ya
+    延时100ms
+    
+    
+    
+  
+    
       
       
       
